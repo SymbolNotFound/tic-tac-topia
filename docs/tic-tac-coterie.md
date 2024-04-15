@@ -1,4 +1,4 @@
-# Tic-Tac-Cards
+# Tic-Tac-Coterie
 
 Players are dealt five cards from an special deck.  This deck has 27 cards, each
 unique and consisting of these properties:
@@ -8,7 +8,11 @@ unique and consisting of these properties:
 - **count**: one, two or three symbols (all the same color and contour)
 
 In this variant of Tic-Tac-Toe, players alternate laying cards down on the 3x3
-board in pursuit of making a valid line constructed only of
+board in pursuit of making a valid line constructed only of groupings where each
+card shares the property of the other two, or is distinct between the three cards
+in the group.  Because there are only three options in each of these properties,
+once you have a pair of cards you know what the third is in a valid combination.
+
 
 ## Essential State
 

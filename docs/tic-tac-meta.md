@@ -6,10 +6,10 @@ A meta-game of different Tic-Tac-Toe variants, together forming a Tic-Tac-Toe bo
 
 The player's cell selection and the associatd game's outcome are essential
 state.  The association of each cell to its specific variant of Tic-Tac-Toe
-is also essential state, and it is known at game init time.  It is possible
-to make a variant where the players choose among different variants based on
-position type and which games have not yet been played, but here attention
-has been paid to positioning of each subgame in order to balance each line.
+is also essential state, and it is known at game init time.  Attention
+has been given to positioning of each subgame in order to balance each line
+and the combination of games along each line (players can challenge established
+markings if they occupy 2 of the 3 results).
 
 ```
  (8) (1) (6)
@@ -27,25 +27,30 @@ possibly with the rotation of players into the two roles.
 
 The numbers in the board depicted above correspond to these games:
 
-1. [Tic-Tac-Throw-Pie](tic-tac-throw-pie.md)
 
-   Play is similar to original Tic-Tac-Toe, except the players are attempting
-   to lose (hence, "throw") and the second player may take the "pie rule"
-   (swapping with the first player's move and passing on their first turn).  The
-   board may use a triangle of hexagons for additional unfamiliarity.
-
-2. [Nine Holes](tic-tac-morris.md)
+1. [Nine Holes](tic-tac-morris.md)
 
    Also known as Three Men's Morris and is a variant of the other Mills/Morris
    games.  To compensate for the solved first-move strategy, the first player is
    not allowed to play in the center on their first turn.  A draw in this game,
    or in any of the other draw-able games, blocks line completion.
 
+2. [Tic-Tac-Throw-Pie](tic-tac-throw-pie.md)
+
+   Play is similar to original Tic-Tac-Toe, except the players are attempting
+   to lose (hence, "throw") and the second player may take the "pie rule"
+   (swapping with the first player's move and passing on their first turn).
+   The board uses a triangle of 10 hexagons for additional unfamiliarity and
+   a better distribution of |lines| available at each cell.
+
 3. [Tic-Tac-Tandem](tic-tac-tandem.md)
 
    Exact rules of Tic-Tac-Toe, except players move simultaneously.  If both
    players attempt the same position, neither gets to mark it and it becomes
-   off-limits for one turn.
+   frozen or off-limits for the next turn.  So, either two squares are marked
+   or nothing is marked and one cell is frozen out.  After the third move,
+   players may "erase" a marking.  Two erases do not conflict but an erase and
+   marking will freeze the cell and keep its marking.  First to make a line wins.
 
 4. [Tic-Tac-Janken](tic-tac-janken.md)
 
@@ -75,10 +80,10 @@ The numbers in the board depicted above correspond to these games:
    revealed (but not the most recent) it is shown but not removed.  Play ends
    when the board is filled.
 
-7. [Tic-Tac-Cards (mini-Set deck)](tic-tac-cards-set.md)
+7. [Tic-Tac-Coterie](tic-tac-coterie.md)
 
-   Perhaps the most novel entry on this list, this is a combination of Set (the
-   puzzle card game) and the three-by-three board.  A reduced deck is used where
+   Perhaps the most novel entry on this list, this is a combination of a special
+   deck of cards and the three-by-three board.  A reduced deck is used where
    only three properties vary (the shading is consistent in all cards, so that
    the probabilities work out better for a small hand and limited play area).
    Five cards are dealt to each player and one card played face-up in the center
@@ -125,3 +130,37 @@ the user is modifying directly when they move.  However, you can reconstruct
 the board representation from the player moves but you may not always be able
 to reonstruct the player's moves from a board representation.  The two are
 otherwise equivalent so it is simpler to represent only one or the other.
+
+
+## "Stealing" by challenging opponent's square
+
+A player having two of three in a line may challenge their opponent by combining
+two games.  One of them must be the target of their opponent and the other must
+be one of the player's along the line.  The rules of the new game are a mix of
+the rules from these two and if the player wins they win the line.  However, if
+the opponent wins then the position which the player chose is captured by their
+opponent!  Because this means a game may still be won with a full board, no draw
+condition exists in the meta-game, either.
+
+Example:
+
+```
+ X |   | X
+---+---+---
+   | X | O
+---+---+---
+   |   | O
+```
+
+This is a common game state when *X* leads with a center play, normally it
+would result in an *X* win because *O* can't block both of the possible lines.
+However, with the steal rule then *O* can attempt to steal the top-right
+position with one of their owned cells along the right side -- either a version
+of Tic-Tac-Shadow where the objective is to lose (combining the two corners) or
+a version of Tic-Tac-Coterie where the opponent's moves aren't seen unless a
+card is played on one of their moves.  Both games have enough uncertainty that
+the game could go either way.
+
+In order to balance gameplay, this move is not allowed during the first five
+turns.  This means *O*, the player who didn't have initiative in the meta-game,
+has the first opportunity to perform this move.
