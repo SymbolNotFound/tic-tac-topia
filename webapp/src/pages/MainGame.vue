@@ -1,42 +1,58 @@
 <template>
-  <q-page class="row items-center justify-evenly">
-    <example-component
-      title="Example component"
-      active
-      :todos="todos"
-      :meta="meta"
-    ></example-component>
+  <q-page class="column items-center justify-around">
+    <main>
+      <tic-tac-meta-board
+        @choose="handlePlayerChoice"
+      ></tic-tac-meta-board>
+    </main>
+
+    <footer>
+      <div>
+        <!-- socials, discord?, etc. for SymbolNotFound and Turing Game -->
+        <p class="text-body2">&copy; 2024 Symbol Not Found</p>
+      </div>
+    </footer>
+
+    <q-dialog
+      v-model="dialog"
+      transition-show="flip-up"
+      transition-hide="flip-down">
+      <q-card>
+        <q-card-section class="row items-center">
+          <span>Player 'x' wins!</span>
+        </q-card-section>
+        <q-card-section class="row items-center">
+          <q-btn flat label="Play Again" v-close-popup></q-btn>
+        </q-card-section>
+      </q-card> 
+    </q-dialog>
   </q-page>
 </template>
 
-<script setup lang="ts">
-import { Todo, Meta } from 'components/models';
-import ExampleComponent from 'components/ExampleComponent.vue';
-import { ref } from 'vue';
+<style scoped>
+footer {
+  color: slategrey;
+  text-align: center;
+}
+</style>
 
-const todos = ref<Todo[]>([
-  {
-    id: 1,
-    content: 'ct1'
-  },
-  {
-    id: 2,
-    content: 'ct2'
-  },
-  {
-    id: 3,
-    content: 'ct3'
-  },
-  {
-    id: 4,
-    content: 'ct4'
-  },
-  {
-    id: 5,
-    content: 'ct5'
-  }
-]);
-const meta = ref<Meta>({
-  totalCount: 1200
+<script setup lang="ts">
+import { ref } from 'vue';
+import TicTacMetaBoard from '../components/MetaBoard.vue'
+
+const dialog = ref(false)
+
+interface MetaBoardState {
+  moves: number[][]
+  turn: number
+}
+
+const meta = ref<MetaBoardState>({
+  moves: [],
+  turn: 1
 });
+
+function handlePlayerChoice(position: [number, number]) {
+  meta.value.moves.push(position)
+}
 </script>

@@ -91,7 +91,8 @@ The numbers in the board depicted above correspond to these games:
 
 8. [Tic-Tac-Tiles](tic-tac-tiles.md)
 
-   This game is a variant of Number Scrabble.  The original game just has each
+   This game is a combination of Number Scrabble with wager-based Tic-Tac-Toe,
+     The original game just has each
    player choose (uniquely) a number $(1-9)$ until any three numbers add up to
    fifteen.  It is isomorphic to Tic-Tac-Toe (one need only refer to the Magic
    Square to see the relationship) so by itself it wouldn't be an interesting

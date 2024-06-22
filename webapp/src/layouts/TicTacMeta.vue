@@ -15,8 +15,6 @@
         <q-toolbar-title>
           Tic-Tac-Meta
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
@@ -47,7 +45,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
+import EssentialLink, { EssentialLinkProps } from '../components/EssentialLink.vue';
 
 const essentialLinks: EssentialLinkProps[] = [
   {
@@ -65,6 +63,9 @@ const essentialLinks: EssentialLinkProps[] = [
 ];
 
 const leftDrawerOpen = ref(false)
+const menuIcon = () => {
+  return leftDrawerOpen.value ? 'backburger' : 'menu';
+}
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
