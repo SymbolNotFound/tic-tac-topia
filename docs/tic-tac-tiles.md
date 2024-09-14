@@ -22,7 +22,7 @@ Nine tiles, each containing the numbers 1 through 9 on one side, and the other
 containing its value according to this table:
 
 number | value
-==============
+:-----:|:-----:
    1   |   1
    2   |   2
    3   |   1
