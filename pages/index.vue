@@ -1,3 +1,5 @@
 <template>
-  <div>... TODO home page</div>
+  <div>
+    
+  </div>
 </template>
