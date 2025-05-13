@@ -1,5 +1,4 @@
-<template>
-<NuxtLayout name="rules">
+<template><NuxtLayout name="rules">
 
 <p>
 These games are intended to be simple while also touching on many varieties of
