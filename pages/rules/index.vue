@@ -1,4 +1,4 @@
-<template><NuxtLayout name="rules">
+<template>
 
 <p>
 These games are intended to be simple while also touching on many varieties of
@@ -91,8 +91,7 @@ The numbers in the board depicted above correspond to these games:
 </p>
 
 <ol>
-<li><a href="tic-tac-morris.md">Nine Holes</a>
-
+<li><NuxtLink to="stones">Tic-Tac-Stones</NuxtLink>
 <p>
    Also known as Three Men's Morris and is a variant of the other Mills/Morris
    games.  To compensate for the solved first-move strategy, the first player is
@@ -101,8 +100,7 @@ The numbers in the board depicted above correspond to these games:
 </p>
 </li>
 
-<li><a href="tic-tac-throw-pie.md">Tic-Tac-Throw-Pie</a>
-
+<li><NuxtLink to="throw">Tic-Tac-Throw-Pie</NuxtLink>
 <p>
    Play is similar to original Tic-Tac-Toe, except the players are attempting
    to lose (hence, "throw") and the second player may take the "pie rule"
@@ -112,8 +110,7 @@ The numbers in the board depicted above correspond to these games:
 </p>
 </li>
 
-<li><a href="tic-tac-tandem.md">Tic-Tac-Tandem</a>
-
+<li><NuxtLink to="tandem">Tic-Tac-Tandem</NuxtLink>
 <p>
    Exact rules of Tic-Tac-Toe, except players move simultaneously.  If both
    players attempt the same position, neither gets to mark it and it becomes
@@ -124,8 +121,7 @@ The numbers in the board depicted above correspond to these games:
 </p>
 </li>
 
-<li><a href="tic-tac-janken.md">Tic-Tac-Janken</a>
-
+<li><NuxtLink to="janken">Tic-Tac-Janken</NuxtLink>
 <p>
    Similar to Tic-Tac-Toe but players mark $\{ rock | paper | scissors \}$ at a
    chosen position.  If players mark the same cell, their chosen marking is
@@ -136,8 +132,7 @@ The numbers in the board depicted above correspond to these games:
 </p>
 </li>
 
-<li><a href="tic-tac-rainbow.md">Tic-Tac-Rainbow</a>
-
+<li><NuxtLink to="rainbow">Tic-Tac-Rainbow</NuxtLink>
 <p>
    A new board layout for the center square, this game uses a hexagonal grid
    that is slightly larger than the 3x3 grid of the other variants here.  The
@@ -147,8 +142,7 @@ The numbers in the board depicted above correspond to these games:
 </p>
 </li>
 
-<li><a href="tic-tac-shadow.md">Tic-Tac-Shadow</a>
-
+<li><NuxtLink to="shadow">Tic-Tac-Shadow</NuxtLink>
 <p>
    A variant using imperfect information -- the first in this list to require
    GDL-II to describe -- it hides where the other player has moved and reveals
@@ -161,8 +155,7 @@ The numbers in the board depicted above correspond to these games:
 </p>
 </li>
 
-<li><a href="tic-tac-coterie.md">Tic-Tac-Coterie</a>
-
+<li><NuxtLink to="cards">Tic-Tac-Coterie</NuxtLink>
 <p>
    Perhaps the most novel entry on this list, this is a combination of a special
    deck of cards and the three-by-three board.  A reduced deck is used where
@@ -173,8 +166,7 @@ The numbers in the board depicted above correspond to these games:
 </p>
 </li>
 
-<li><a href="tic-tac-tiles.md">Tic-Tac-Tiles</a>
-
+<li><NuxtLink to="tiles">Tic-Tac-Tiles</NuxtLink>
 <p>
    This game is a combination of Number Scrabble with wager-based Tic-Tac-Toe,
    each
@@ -193,8 +185,7 @@ The numbers in the board depicted above correspond to these games:
 </p>
 </li>
 
-<li><a href="tic-tac-thrice.md">Tic-Tac-Thrice</a>
-
+<li><NuxtLink to="thrice">Tic-Tac-Thrice</NuxtLink>
 <p>
    Players roll three d6 dice where each side indicates a board's position type
    (three sides for any edge, two for any corner and one for the center).  The
@@ -267,11 +258,10 @@ turns.  This means *O*, the player who didn't have initiative in the meta-game,
 has the first opportunity to perform this move.
 </p>
 
-</NuxtLayout>
 </template>
 
 <script setup lang="ts">
 definePageMeta({
-  layout: false,
+  layout: 'rules'
 })
 </script>
