@@ -1,11 +1,11 @@
 <template>
 
-<h1>Tic-Tac-Classic (Nine Holes)</h1>
+<h1>Tic-Tac-Stones</h1>
 
 <p>
-Also known as *Three Men's Morris*, see also very close variants in *Achi*
+Known as *Three Men's Morris*, see also very close variants in *Achi*
 (four pieces per player), *Shisima* (octagonal board) and *Dara* (larger 6x5
-board, play does not terminate with the first line but continues with captures).
+board, play continuing after the first line and including captures).
 In *Tant fant* the drop phase is removed, all pieces start on a player's side.
 A variant of *Tant fant* also requires lines to be diagonal and not horizontal
 or vertical.

@@ -1,5 +1,7 @@
 <template>
 <main>
-  <meta-game />
+  <main>
+  <game-tic-tac-meta />
+  </main>
 </main>
 </template>

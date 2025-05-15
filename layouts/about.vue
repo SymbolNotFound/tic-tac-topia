@@ -1,4 +1,11 @@
 <template>
-  <div>... about (layout)</div>
+  <site-header />
   <slot />
+  <site-footer />
 </template>
+
+<script setup lang="ts">
+</script>
+
+<style>
+</style>

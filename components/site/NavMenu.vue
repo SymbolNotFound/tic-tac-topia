@@ -1,27 +1,26 @@
 <template>
-  <nav>
-    <ul id="nav-menu" class="primary-navigation flex">
-      <li class="acive"> <!-- programmatically define the active bullet-->
-        <a href="/">
-          <span aria-hidden="true">🏠</span>Home
-        </a>
-      </li><li>
-        <a href="/about/">
-          <span aria-hidden="true">📖</span>About
-        </a>
-      <!--
-      </li><li>
-        <a href="/support">
-          <span aria-hidden="true">🫶</span>Support
-        </a>
-      -->
-      </li><li>
-        <a href="/join">
-          <span aria-hidden="true">🕹️</span>Play
-        </a>
-      </li>
-    </ul>
-  </nav>
+  <nav><ul id="nav-menu" class="primary-navigation flex">
+    <SiteNavLink
+      href="/"
+      icon="🏠">
+      Home
+    </SiteNavLink>
+    <SiteNavLink
+      href="/about/"
+      icon="📖">
+      About
+    </SiteNavLink>
+    <SiteNavLink
+      href="/support"
+      icon="🫶">
+      Support
+    </SiteNavLink>
+    <SiteNavLink
+      href="/join"
+      icon="🕹️">
+      Play
+    </SiteNavLink>
+  </ul></nav>
 </template>
 
 <script setup lang="ts">
