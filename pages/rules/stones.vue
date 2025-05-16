@@ -35,17 +35,17 @@ a position of the baord.
 <h2>Legal player actions</h2>
 
 <p>
-Play proceeds in two phases:
+Play proceeds in two stages -- placement and movement.
 </p>
 
 <ol>
 <li>
-<b>drop phase</b> - each player alternates turns placing their piece on an open
+<b>placement stage</b> - each player alternates turns placing their piece on an open
 position of the board.
 </li>
 
 <li>
-<b>move phase</b> - each player moves one of their pieces to any (or adjacent)
+<b>movement stage</b> - each player moves one of their pieces to any (or adjacent)
 position of the board.
 </li>
 </ol>

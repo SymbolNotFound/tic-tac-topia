@@ -1,25 +1,27 @@
 <template>
   <nav><ul id="nav-menu" class="primary-navigation flex">
-    <SiteNavLink
-      href="/"
+    <site-nav-link
+      slug="/"
       icon="🏠">
       Home
-    </SiteNavLink>
-    <SiteNavLink
-      href="/about/"
+    </site-nav-link>
+    <site-nav-link
+      slug="/about/"
       icon="📖">
       About
-    </SiteNavLink>
-    <SiteNavLink
-      href="/support"
-      icon="🫶">
-      Support
-    </SiteNavLink>
-    <SiteNavLink
-      href="/join"
+    </site-nav-link>
+  <!--
+  <site-nav-link
+    slug="/support"
+    icon="🫶">
+    Support
+  </site-nav-link>
+  -->
+    <site-nav-link
+      slug="/join"
       icon="🕹️">
       Play
-    </SiteNavLink>
+    </site-nav-link>
   </ul></nav>
 </template>
 
@@ -29,10 +31,11 @@
 <style>
 .primary-navigation {
   list-style: none;
-  padding: 0;
-  margin: 0;
+  position: fixed;
+  padding-inline: 2rem;
+  right: 0;
 
-  background: hsl(0 0% 100% / .1);
+  /* background: hsl(0 0% 100% / .1); */
   backdrop-filter: blur(1rem);
 }
 
@@ -43,7 +46,7 @@
 }
 
 .primary-navigation a > [aria-hidden="true"] {
-  filter: grayscale(.7);
+  filter: grayscale(.875);
   margin-inline-end: .5em;
 }
 
