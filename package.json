@@ -18,5 +18,8 @@
     "nuxt": "^3.17.1",
     "vue": "^3.5.13",
     "vue-router": "^4.5.1"
+  },
+  "resolutions": {
+    "h3": "npm:h3-nightly@latest"
   }
 }
