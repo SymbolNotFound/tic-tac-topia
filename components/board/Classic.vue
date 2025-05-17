@@ -16,6 +16,8 @@
 <script lang="ts" setup>
 import { useTemplateRef, onMounted, ref } from 'vue'
 
+const emit = defineEmits(['mark'])
+
 // role(x)
 // role(o)
 type Role = "X" | "O"
@@ -52,7 +54,7 @@ function currentPlayer(turn: number): Role {
 
 const mark = (player: Role, row: number, col: number) => {
   if (board.value[row][col] == BLANK) {
-    // emit
+    emit('mark', row, col)
   }
 }
 
