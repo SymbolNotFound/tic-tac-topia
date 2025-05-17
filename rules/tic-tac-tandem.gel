@@ -1,0 +1,77 @@
+---
+name: tic-tac-tandem
+title: Tic-Tac-Tandem
+author: Kevin Damm
+version: 0.2.0
+---
+
+consult { #RectGrid } from "boards/MNK.gel"
+
+enum Marking: {{ *" " | "X" | "O" }}
+
+role _ :: {
+  Marking
+}
+
+role(playerX) { Marking: "X" }
+role(playerO) { Marking: "O" }
+
+enum Index :: {{ 1..3 }}
+enum BoardIndex :: {{ 0 | 1 }}
+
+boards := {[
+  #RectGrid[Index, Index],
+  #RectGrid[Index, Index],
+]}
+
+input(?player,
+  Mark(0,
+    ?i1 in Index,
+    ?j1 in Index)
+  and
+  Mark(1,
+    ?i2 in Index,
+    ?j2 in Index))
+
+?player -> Mark(?bi, ?i, ?j)
+  :- ?i in Index,
+     ?j in Index,
+     boards[?bi][?i, ?j] == " "
+  ==> boards[?bi][?i, ?j] := ?player.Marking
+
+row(?i in BoardIndex, ?row, ?mark) :-
+  board[?i][?row, 1] == ?mark and
+  board[?i][?row, 2] == ?mark and
+  board[?i][?row, 3] == ?mark
+
+column(?i in BoardIndex, ?col, ?mark) :-
+  board[?i][1, ?col] == ?mark and
+  board[?i][2, ?col] == ?mark and
+  board[?i][3, ?col] == ?mark
+
+diagonal(?i in BoardIndex, ?mark) :-
+  board[?i][1, 1] == ?mark and
+  board[?i][2, 2] == ?mark and
+  board[?i][3, 3] == ?mark
+
+diagonal(?i in BoardIndex, ?mark) :-
+  board[?i][1, 3] == ?mark and
+  board[?i][2, 2] == ?mark and
+  board[?i][3, 1] == ?mark
+
+line(?i in BoardIndex, ?mark) :- row(?i, ?row, ?mark)
+line(?i in BoardIndex, ?mark) :- column(?i, ?col, ?mark)
+line(?i in BoardIndex, ?mark) :- diagonal(?i, ?mark)
+
+open(?i in BoardIndex) :- board[_][_, _] == " "
+
+playerX $+ 100
+  :- line(_, x) & ~line(_, o)
+
+playerX $+ 50, playerO $+ 50
+  :- ~line(_, x) & ~line(_, o)
+
+playerO $+ 100 :- ~line(_, x) & line(_, o)
+
+terminal :- line(_, _)
+terminal :- ~open
