@@ -2,7 +2,7 @@
 name: tic-tac-tandem
 title: Tic-Tac-Tandem
 author: Kevin Damm
-version: 0.2.0
+version: 0.5.0
 ---
 
 consult { #RectSurface } from "boards/MNK.gel"
@@ -13,8 +13,8 @@ role _ :: {
   Marking
 }
 
-role(playerX) { Marking: "X" }
-role(playerO) { Marking: "O" }
+role playerX { Marking: "X" }
+role playerO { Marking: "O" }
 
 enum Index :: {{ 1..3 }}
 enum BoardIndex :: {{ 0 | 1 }}
@@ -24,7 +24,7 @@ boards := {[
   #RectSurface[Index, Index, Marking],
 ]}
 
-input(?player,
+input(role ?player,
   Mark(0,
     ?i1 in Index,
     ?j1 in Index)
@@ -38,8 +38,8 @@ input(?player,
      ?j in Index,
      boards[?bi][?i, ?j] == " "
   ==> boards[?bi][?i, ?j] := ?player.Marking
-  <== playerX.Mark(?b, ?i, ?j) and playerO.Mark(?b, ?i, ?j)
-      ==> boards[?b][?i, ?j] = "~"
+  <== playerX.Mark(?bi, ?i, ?j) and playerO.Mark(?bi, ?i, ?j)
+      ==> boards[?bi][?i, ?j] = "~"
 
 row(?i in BoardIndex, ?row, ?mark) :-
   boards[?i][?row, 1] == ?mark and
@@ -70,7 +70,7 @@ open(?i in BoardIndex) :- boards[_][_, _] == " "
 playerX $+ 100
   :- line(_, x) & ~line(_, o)
 
-playerX $+ 50, playerO $+ 50
+playerX $+ 50 and playerO $+ 50
   :- ~line(_, x) & ~line(_, o)
 
 playerO $+ 100 :- ~line(_, x) & line(_, o)
