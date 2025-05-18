@@ -7,7 +7,7 @@ version: 0.2.0
 
 consult { #RectGrid } from "boards/MNK.gel"
 
-enum Marking: {{ *" " | "X" | "O" }}
+enum Marking: {{ *" " | "X" | "O" | "~" }}
 
 role _ :: {
   Marking
@@ -38,32 +38,34 @@ input(?player,
      ?j in Index,
      boards[?bi][?i, ?j] == " "
   ==> boards[?bi][?i, ?j] := ?player.Marking
+  <== playerX.Mark(?b, ?i, ?j) and playerO.Mark(?b, ?i, ?j)
+      ==> boards[?b][?i, ?j] = "~"
 
 row(?i in BoardIndex, ?row, ?mark) :-
-  board[?i][?row, 1] == ?mark and
-  board[?i][?row, 2] == ?mark and
-  board[?i][?row, 3] == ?mark
+  boards[?i][?row, 1] == ?mark and
+  boards[?i][?row, 2] == ?mark and
+  boards[?i][?row, 3] == ?mark
 
 column(?i in BoardIndex, ?col, ?mark) :-
-  board[?i][1, ?col] == ?mark and
-  board[?i][2, ?col] == ?mark and
-  board[?i][3, ?col] == ?mark
+  boards[?i][1, ?col] == ?mark and
+  boards[?i][2, ?col] == ?mark and
+  boards[?i][3, ?col] == ?mark
 
 diagonal(?i in BoardIndex, ?mark) :-
-  board[?i][1, 1] == ?mark and
-  board[?i][2, 2] == ?mark and
-  board[?i][3, 3] == ?mark
+  boards[?i][1, 1] == ?mark and
+  boards[?i][2, 2] == ?mark and
+  boards[?i][3, 3] == ?mark
 
 diagonal(?i in BoardIndex, ?mark) :-
-  board[?i][1, 3] == ?mark and
-  board[?i][2, 2] == ?mark and
-  board[?i][3, 1] == ?mark
+  boards[?i][1, 3] == ?mark and
+  boards[?i][2, 2] == ?mark and
+  boards[?i][3, 1] == ?mark
 
 line(?i in BoardIndex, ?mark) :- row(?i, ?row, ?mark)
 line(?i in BoardIndex, ?mark) :- column(?i, ?col, ?mark)
 line(?i in BoardIndex, ?mark) :- diagonal(?i, ?mark)
 
-open(?i in BoardIndex) :- board[_][_, _] == " "
+open(?i in BoardIndex) :- boards[_][_, _] == " "
 
 playerX $+ 100
   :- line(_, x) & ~line(_, o)
