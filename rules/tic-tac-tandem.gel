@@ -5,7 +5,7 @@ author: Kevin Damm
 version: 0.2.0
 ---
 
-consult { #RectGrid } from "boards/MNK.gel"
+consult { #RectSurface } from "boards/MNK.gel"
 
 enum Marking: {{ *" " | "X" | "O" | "~" }}
 
@@ -20,8 +20,8 @@ enum Index :: {{ 1..3 }}
 enum BoardIndex :: {{ 0 | 1 }}
 
 boards := {[
-  #RectGrid[Index, Index],
-  #RectGrid[Index, Index],
+  #RectSurface[Index, Index, Marking],
+  #RectSurface[Index, Index, Marking],
 ]}
 
 input(?player,
