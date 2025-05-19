@@ -1,79 +1,53 @@
 ---
-name: tic-tac-tandem
+slug: t3-tandem
 title: Tic-Tac-Tandem
 author: Kevin Damm
-version: 0.5.0
+version: 0.7.0
 ---
 
-consult { #RectSurface } from "boards/MNK.gel"
+consult { #SquareSurface } from "boards/MNK.gel"
 
-enum Marking: {{ *" " | "X" | "O" | "~" }}
+data BLANK := "_"
+data FROZEN := "~"
+enum Marking: {{ *BLANK | "X" | "O" | FROZEN }}
 
 role _ :: {
-  Marking
+  Marker: Marking
 }
 
-role playerX { Marking: "X" }
-role playerO { Marking: "O" }
+role playerX { Marker: "X" }
+role playerO { Marker: "O" }
 
 enum Index :: {{ 1..3 }}
-enum BoardIndex :: {{ 0 | 1 }}
+enum BoardIndex :: {{ left | right }}
 
-boards := {[
-  #RectSurface[Index, Index, Marking],
-  #RectSurface[Index, Index, Marking],
+init boards := {[
+  #SquareSurface<Index, Marking> * BoardIndex
 ]}
 
-input(role ?player,
-  Mark(0,
-    ?i1 in Index,
-    ?j1 in Index)
-  and
-  Mark(1,
-    ?i2 in Index,
-    ?j2 in Index))
 
-?player -> Mark(?bi, ?i, ?j)
-  :- ?i in Index,
-     ?j in Index,
-     boards[?bi][?i, ?j] == " "
-  ==> boards[?bi][?i, ?j] := ?player.Marking
-  <== playerX.Mark(?bi, ?i, ?j) and playerO.Mark(?bi, ?i, ?j)
-      ==> boards[?bi][?i, ?j] = "~"
+input Mark(
+  all BoardIndex,
+  Index, Index)
 
-row(?i in BoardIndex, ?row, ?mark) :-
-  boards[?i][?row, 1] == ?mark and
-  boards[?i][?row, 2] == ?mark and
-  boards[?i][?row, 3] == ?mark
+?player -> Mark(?bi, ?row, ?col)
+  :- ?row in Index,
+     ?col in Index,
+     boards[?bi][?row, ?col] == BLANK
+  ==> boards[?bi][?row, ?col] := ?player.Marker
+  \=> playerX.Mark(?bi, ?row, ?col) and playerO.Mark(?bi, ?row, ?col)
+      ==> boards[?bi][?row, ?col] = FROZEN
 
-column(?i in BoardIndex, ?col, ?mark) :-
-  boards[?i][1, ?col] == ?mark and
-  boards[?i][2, ?col] == ?mark and
-  boards[?i][3, ?col] == ?mark
+line(?mark) :- boards[?i].line(?mark)
+open :- boards[_][_, _] == BLANK
 
-diagonal(?i in BoardIndex, ?mark) :-
-  boards[?i][1, 1] == ?mark and
-  boards[?i][2, 2] == ?mark and
-  boards[?i][3, 3] == ?mark
 
-diagonal(?i in BoardIndex, ?mark) :-
-  boards[?i][1, 3] == ?mark and
-  boards[?i][2, 2] == ?mark and
-  boards[?i][3, 1] == ?mark
+terminal :- line(_)
+terminal :- ~open
 
-line(?i in BoardIndex, ?mark) :- row(?i, ?row, ?mark)
-line(?i in BoardIndex, ?mark) :- column(?i, ?col, ?mark)
-line(?i in BoardIndex, ?mark) :- diagonal(?i, ?mark)
 
-open(?i in BoardIndex) :- boards[_][_, _] == " "
-
-playerX $+ 100
-  :- line(_, x) & ~line(_, o)
+playerX $+ 100 :- line(x) & ~line(o)
+playerO $+ 100 :- ~line(x) & line(o)
 
 playerX $+ 50 and playerO $+ 50
-  :- ~line(_, x) & ~line(_, o)
-
-playerO $+ 100 :- ~line(_, x) & line(_, o)
-
-terminal :- line(_, _)
-terminal :- ~open
+  :- ~line(x) & ~line(o)
