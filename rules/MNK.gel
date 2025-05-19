@@ -1,0 +1,32 @@
+
+
+init #SquareSurface<Size, Marking> := {[ Marking * Size * Size ]}
+
+func #SquareSurface<Size, Marking> (
+
+  row(?row in Index,
+      ?mark in Marking) :-
+    ?board[?row, 1] == ?mark and
+    ?board[?row, 2] == ?mark and
+    ?board[?row, 3] == ?mark
+
+  column(?col in Index,
+         ?mark in Marking) :-
+    ?board[1, ?col] == ?mark and
+    ?board[2, ?col] == ?mark and
+    ?board[3, ?col] == ?mark
+
+  diagonal(?mark in Marking) :-
+    ?board[1, 1] == ?mark and
+    ?board[2, 2] == ?mark and
+    ?board[3, 3] == ?mark
+
+  diagonal(?mark in Marking) :-
+    ?board[1, 3] == ?mark and
+    ?board[2, 2] == ?mark and
+    ?board[3, 1] == ?mark
+
+  line(?mark) :- row(?row, ?mark)
+  line(?mark) :- column(?col, ?mark)
+  line(?mark) :- diagonal(?mark)
+)
