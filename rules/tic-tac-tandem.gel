@@ -30,12 +30,10 @@ input Mark(
   all BoardIndex,
   Index, Index)
 
-?player -> Mark(?bi, ?row, ?col)
-  :- ?row in Index,
-     ?col in Index,
-     boards[?bi][?row, ?col] == BLANK
-  ==> boards[?bi][?row, ?col] := ?player.Marker
-  \=> playerX.Mark(?bi, ?row, ?col) and playerO.Mark(?bi, ?row, ?col)
+?player -> Mark(?bi, ?row, ?col) :-
+  boards[?bi][?row, ?col] == BLANK
+    ==> boards[?bi][?row, ?col] := ?player.Marker
+    \=> playerX.Mark(?bi, ?row, ?col) and playerO.Mark(?bi, ?row, ?col)
       ==> boards[?bi][?row, ?col] = FROZEN
 
 line(?mark) :- boards[?i].line(?mark)

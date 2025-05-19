@@ -1,0 +1,46 @@
+---
+slug: t3-stones
+title: Tic-Tac-Stones
+summary: |
+  A reproduction of one of the oldest known games, variants are known as Morris,
+  Achi, Shisima, Dara, and others.  Play consists of two stages: place and move.
+  Winner is the first player to make a line of three in a row with their pieces.
+author: Kevin Damm
+version: 0.3.0
+---
+
+consult { #SquareSurface } from "boards/MNK"
+
+role _ :: {
+  Marker: Marking
+}
+
+data BLANK := "_"
+enum Marking := *EMPTY | "red" | "black"
+enum Index := {{ 1..3 }}
+
+role left { Marker: "red" }
+role right { Marker: "black" }
+
+init control := AlternatingTurns<{{left, right}}>.control
+
+init board := #SquareSurface<Index, Marking>
+
+
+phase placement (
+  input Place(Index, Index)
+
+  ?player -> Place(?row, ?col) :-
+    board[?row, ?col] == BLANK
+      ==> board[?row, ?col] = ?player.Marker
+)
+
+phase movement (
+  input Move (Index, Index) (Index, Index)
+
+  ?player -> Move (?row, ?col) (?toRow, ?toCol) :-
+    board[?row, ?col] == ?player.Marker and
+    board[?toRow, ?toCol] == BLANK
+      ==> board[?row, ?col] := BLANK and
+          board[?toRow, ?toCol] := ?player.Marker
+)
