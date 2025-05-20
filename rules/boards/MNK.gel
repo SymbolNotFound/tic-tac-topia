@@ -1,0 +1,67 @@
+%% Copyright (c) 2025, Symbol Not Found
+%% 
+%% Redistributions of source code must retain the above copyright notice, this
+%% list of conditions and the following disclaimer.
+%% 
+%% Redistributions in binary form must reproduce the above copyright notice,
+%% this list of conditions and the following disclaimer in the documentation
+%% and/or other materials provided with the distribution.
+%% 
+%% Neither the name of the copyright holder nor the names of its contributors
+%% may be used to endorse or promote products derived from this software without
+%% specific prior written permission.
+%% 
+%% THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+%% AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+%% IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+%% ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+%% LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+%% CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+%% SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+%% INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+%% CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+%% ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+%% POSSIBILITY OF SUCH DAMAGE.
+%%
+%% github:SymbolNotFound/tic-tac-topia/rules/boards/MNK.gel
+
+^summary := "Common surface structures for <M, N, K> board layouts."
+^refer := "https://en.wikipedia.org/wiki/M,n,k-game"
+^author := "Kevin Damm"
+
+%% A square surface of positions for alignment and territory games.
+%% Index is a two-dimensional tuple that defines positions on the surface
+%% Marking is the domain of valid 
+surface #RectSurface<[2]Index, Marking>
+    <=> {[ Index * Marking ]}
+
+basis #RectSurface<[2]Index, Marking> {
+  
+  row((?row, _) in Index,
+      ?mark in Marking) :-
+    this(?row, all _, ?mark)
+
+  column((_, ?col) in Index,
+         ?mark in Marking) :-
+    this(all _, ?col, ?mark)
+
+  diagonal(?mark in Marking) :-
+    Index is (?row, ?col) and
+    |?row| == |?col| and
+    forall (?i, ?i) in Index
+      this(?i, ?i, ?mark)
+
+  diagonal(?mark in Marking) :-
+    Index is (?row, ?col) and
+    |?row| == |?col| and
+    forall (?i, -?i) in Index
+      this(?i, -?i, ?mark)
+
+  line(?mark in Marking) :- row(_, ?mark)
+  line(?mark in Marking) :- column(_, ?mark)
+  line(?mark in Marking) :- diagonal(?mark)
+
+  exists(?mark in Marking) :-
+    this(_, _, ?mark)
+
+}
