@@ -26,42 +26,52 @@
 %% github:SymbolNotFound/tic-tac-topia/rules/boards/MNK.gel
 
 ^summary := "Common surface structures for <M, N, K> board layouts."
-^refer := "https://en.wikipedia.org/wiki/M,n,k-game"
+^refer := "https://wikipedia.org/wiki/M,n,k-game"
 ^author := "Kevin Damm"
+
+consult "itertools" (
+  include zip
+)
 
 %% A square surface of positions for alignment and territory games.
 %% Index is a two-dimensional tuple that defines positions on the surface
-%% Marking is the domain of valid 
-surface #RectSurface<[2]Index, Marking>
-    <=> {[ Index * Marking ]}
+%% Marking is the domain of symbols and atoms that may be assigned to a cell.
+surface #RectSurface<Index in [2]range, Marking>
+    <=> {[ cell(all Index) = (?m in Marking) ]}
 
-basis #RectSurface<[2]Index, Marking> {
+basis #RectSurface<Index, Marking> {
   
   row((?row, _) in Index,
       ?mark in Marking) :-
-    this(?row, all _, ?mark)
+    cell(?row, all _) == ?mark
 
   column((_, ?col) in Index,
          ?mark in Marking) :-
-    this(all _, ?col, ?mark)
+    cell(all _, ?col) == ?mark
 
   diagonal(?mark in Marking) :-
-    Index is (?row, ?col) and
+    Index is ?row * ?col and
+    %% diagonals are only checked on square boards
+    %% but this is something I would reconsider...
     |?row| == |?col| and
-    forall (?i, ?i) in Index
-      this(?i, ?i, ?mark)
+    forall ?index in zip (?row, ?col)
+      cell(?index) == ?mark
 
   diagonal(?mark in Marking) :-
-    Index is (?row, ?col) and
+    Index is ?row * ?col and
+    %% ... at that point probably a generalized
+    %% (vector-based, rather than set-based)
+    %% representation makes more sense, such as one
+    %% achieved by a Kleene-star on movement patterns.
     |?row| == |?col| and
-    forall (?i, -?i) in Index
-      this(?i, -?i, ?mark)
+    forall ?index in zip (?row, reverse ?col)
+      cell(?index) == ?mark
 
   line(?mark in Marking) :- row(_, ?mark)
   line(?mark in Marking) :- column(_, ?mark)
   line(?mark in Marking) :- diagonal(?mark)
 
   exists(?mark in Marking) :-
-    this(_, _, ?mark)
+    cell(_, _) == ?mark
 
 }
