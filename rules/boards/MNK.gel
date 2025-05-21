@@ -33,45 +33,87 @@ consult "itertools" (
   include zip
 )
 
+
 %% A square surface of positions for alignment and territory games.
 %% Index is a two-dimensional tuple that defines positions on the surface
 %% Marking is the domain of symbols and atoms that may be assigned to a cell.
-surface #RectSurface<Index in [2]range, Marking>
-    <=> {[ cell(all Index) = (?m in Marking) ]}
+surface #RectSurface<Index in (range * range), Marking>
+    =:= {[ cell(all Index) = (?m in Marking) ]}
 
-basis #RectSurface<Index, Marking> {
+
+%% Commonly used rectangular boards.
+surface #Rect3x3<Marking> =:= #RectSurface<{[ 1..3 ]} * {[ 1..3 ]}, Marking>
+surface #Rect5x5<Marking> =:= #RectSurface<{[ 1..5 ]} * {[ 1..5 ]}, Marking>
+
+%% Rules inherent to rectangular surfaces, especially line(...) and exists(...).
+basis #RectSurface<Index, Marking> {(
+  Index is ?row * ?col
+  delta is |?row| +- |?col|
   
-  row((?row, _) in Index,
-      ?mark in Marking) :-
-    cell(?row, all _) == ?mark
-
-  column((_, ?col) in Index,
-         ?mark in Marking) :-
-    cell(all _, ?col) == ?mark
-
-  diagonal(?mark in Marking) :-
-    Index is ?row * ?col and
-    %% diagonals are only checked on square boards
-    %% but this is something I would reconsider...
-    |?row| == |?col| and
-    forall ?index in zip (?row, ?col)
-      cell(?index) == ?mark
-
-  diagonal(?mark in Marking) :-
-    Index is ?row * ?col and
-    %% ... at that point probably a generalized
-    %% (vector-based, rather than set-based)
-    %% representation makes more sense, such as one
-    %% achieved by a Kleene-star on movement patterns.
-    |?row| == |?col| and
-    forall ?index in zip (?row, reverse ?col)
-      cell(?index) == ?mark
-
   line(?mark in Marking) :- row(_, ?mark)
   line(?mark in Marking) :- column(_, ?mark)
-  line(?mark in Marking) :- diagonal(?mark)
+  line(?mark in Marking) :- diagonal(_, ?mark)
 
-  exists(?mark in Marking) :-
-    cell(_, _) == ?mark
+  exists(?mark in Marking) :- cell(_, _) == ?mark
 
-}
+  %% square boards where length and width are equal
+  where |?row| #= |?col| => {(
+    
+      row(?row, ?mark in Marking) :-
+        cell(?row, all _) == ?mark
+
+      column(?col, ?mark in Marking) :-
+        cell(all _, ?col) == ?mark
+
+      diagonal(forward, ?mark in Marking) :-
+        forall ?index in zip (?row, ?col)
+          cell(?index) == ?mark
+      diagonal(backward, ?mark in Marking) :-
+        forall ?index in zip (?row, reverse ?col)
+          cell(?index) == ?mark
+  )}
+
+  %% "landscape" aspect ratios.
+  where |?row| #< |?col| => {(
+
+      row(?row, ?mark in Marking) :-
+        forany ?k in {[ 0..delta ]}
+          let start := ?col+?k
+          let limit := ?col+?k+|?row|
+          cell(?row, all {[ start..limit ]}) == ?mark
+
+      column(?col, ?mark in Marking) :-
+        cell(all _, ?col) == ?mark
+
+      diagonal(forward, ?mark in Marking) :-
+        forany ?k in {[ 0..delta ]}
+          forall ?index in zip (?row, ?col + ?k)
+          cell(?index) == ?mark
+      diagonal(backward, ?mark in Marking) :-
+        forany ?k in {[ 0..delta ]}
+          forall ?index in zip (?row, (reverse ?col) + ?k)
+            cell(?index) == ?mark
+  )}
+
+  %% "portrait" aspect ratios
+  where |?row| #> |?col| => {(
+
+      row(?row, ?mark in Marking) :-
+        cell(?row, all _) == ?mark
+
+      col(?col, ?mark in Marking) :-
+        forany ?k in {[ 0..delta ]}
+          let start := ?row+?k
+          let limit := ?row+?k+|?col|
+          cell(all {[ start..limit ]}, ?col) == ?mark
+
+      diagonal(forward, ?mark in Marking) :-
+        forany ?k in {[ 0..delta ]}
+          forall ?index in zip (?row + ?k, ?col)
+            cell(?index) == ?mark
+      diagonal(backward, ?mark in Marking) :-
+        forany ?k in {[ 0..delta ]}
+          forall ?index in zip (?row + ?k, reverse ?col)
+            cell(?index) == ?mark
+  )}
+)}
