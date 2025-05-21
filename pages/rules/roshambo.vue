@@ -1,9 +1,9 @@
 <template>
-<h1>Tic-Tac-Janken (rock, paper, scissors)</h1>
+<h1>Tic-Tac-RoShamBo (rock, paper, scissors)</h1>
 
 <p>
 A game for two players on the traditional 3x3 board where players choose
-between Rock, Paper and Scissors for marking the board.
+between Rock, Paper and Scissors when marking a position on the board.
 </p>
 
 <h2>Board and equipment</h2>

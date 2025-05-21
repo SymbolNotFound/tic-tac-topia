@@ -1,5 +1,6 @@
 <template>
 <footer>
-  <h2>footer...</h2>
+  TODO site footer...
+  <br>&copy; 2025, Symbol Not Found
 </footer>
 </template>

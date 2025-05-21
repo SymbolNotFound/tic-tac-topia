@@ -42,8 +42,16 @@ const O_MARK: Marking = "O"
 const board = ref<Array<Array<Marking>>>(
   new Array(3).map(() => new Array(3).map(()=>BLANK)))
 
+// A computed property for more convenient use in a display:grid layout.
+const flattenedBoard = computed(() => board.value.flat())
+
 // init turn = 1
+// TODO Probably this should be pulled from GameState (or SubGameState?)
 const turn = ref(1)
+
+function marked(row: number, col: number): Marking {
+  return board.value[row][col]
+}
 
 function currentPlayer(turn: number): Role {
   if (turn % 2 === 1) {
@@ -59,3 +67,13 @@ const mark = (player: Role, row: number, col: number) => {
 }
 
 </script>
+
+<style>
+.board {
+  display: grid;
+}
+
+.board-cell {
+  background-color: purple;
+}
+</style>

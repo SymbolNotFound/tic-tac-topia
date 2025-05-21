@@ -40,6 +40,10 @@ const {rowCount = 3, colCount = 3} = defineProps<{
 // ..for a specific X vs. O, MNK<3,3,3> board, see Classic.vue
 type Marking = string
 
+interface RectCell {
+
+}
+
 // init (
 //   let ?i in 1..rowCount
 //   let ?j in 1..colCount
