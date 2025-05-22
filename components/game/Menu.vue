@@ -1,7 +1,9 @@
 <template>
 <div class="menu">
+<!--
   <game-menu-action @click="config">Configure</game-menu-action>
   <game-menu-action @click="openChat">Chat</game-menu-action>
+-->
   <game-menu-action @click="resign">Resign</game-menu-action>
 </div>
 </template>
@@ -9,6 +11,7 @@
 <script setup lang="ts">
 
 
+/*
 function config() {
   // TODO
 }
@@ -16,6 +19,7 @@ function config() {
 function openChat() {
   // TODO
 }
+*/
 
 function resign() {
   // TODO
@@ -24,6 +28,7 @@ function resign() {
 
 <style>
 .menu {
-
+  display: hidden;
+  position: sticky;
 }
 </style>
