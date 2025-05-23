@@ -22,12 +22,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-
-// closed enumeration of valid board-cell states.
-type Marker = ' ' | 'X' | 'O'
+import { type Marker } from '~/shared/types/equip'
 
 // The board is represented as a flat list for convenience with grid layout.
-const { board } = useRectGrid<Marker>(3, 3, 3)
+const { board } = useRectGrid(3, 3, 3)
 
 const statusMsg = ref('starting...')
 
