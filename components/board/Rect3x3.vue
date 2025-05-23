@@ -2,55 +2,53 @@
 <div class="board board-3x3">
   <div v-for="i in 9"
     role="button" aria-pressed="false"
-    :class="['cell', name(i)]"
-    :key="name(i)"
-    @click="mark(i)"
-    @keydown.space="mark(i)"
+    :key="board[i]?.name"
+    :class="[
+      'cell',
+      board[i]?.name]"
     :tabindex="i"
-  >{{ cell(i) }}</div>
+    v-text="marked(i)"
+    @click="board[i]?.mark"
+    @keydown.space="board[i]?.mark"
+  ></div>
 </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-const emit = defineEmits(['mark'])
+const { board } = defineProps<{
+  board: RectCell<Marker>[];
+}>()
+const emit = defineEmits(['mark', 'line', 'filled'])
 
-type Mark = '_' | 'X' | 'O'
-type Coord = [number, number]
-
-interface Marking {
-  Mark: Mark;
-  Coord: Coord;
-}
-const BLANK: Mark = '_'
-
-const board = ref(new Array(9).map((i) => (
-  {Mark: BLANK, Coord: coord(i)}) as Marking))
-
-function coord(index: number): [number, number] {
-  return [
-    Math.floor(index/3) + 1,
-    (index % 3) + 1]
-}
-
-function cell(index: number): Marking {
-  const m = board.value[index]
-  if (m === undefined) {
-    return {Mark: BLANK, Coord: [0, 0]}
+// Each cell in the board is a product of its coordinate and current marking.
+class CellState {
+  constructor(
+    readonly coord: RectCoord,
+    public marker: Marker) {
   }
-  return m
-}
 
-function name(index: number): string {
-  const [row, col] = coord(index)
-  return `cell_${row}_${col}`
-}
-
-function mark(index: number) {
-  if (cell(index).Mark == BLANK) {
-    emit('mark', coord(index))
+  get name(): string {
+    const [ row, col ] = this.coord
+    return `cell_${row}_${col}`
   }
+
+  mark() {
+    if (this.marker == BLANK) {
+      emit('mark', this.coord)
+    }
+    // TODO check line
+    // TODO check filled
+  }
+}
+
+function marked(index: number): Marker {
+  const cell = board.value[index]
+  if (cell === undefined) {
+    return BLANK
+  }
+  return cell.marker
 }
 </script>
 
