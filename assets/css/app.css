@@ -19,8 +19,28 @@
   --wave-red: #d02525;   /* rgb(208,  37,  37) */
 }
 
+html {
+  color-scheme: light dark;
+}
+
 @layer layout {
-  /* TODO global scope rules in layout layer */
+  main {
+    width: min(65ch, 100% - 4rem);
+    margin-inline: auto;
+  }
+
+  body {
+    font-family: system-ui;
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
+  img,
+  picture,
+  svg {
+    max-width: 100%;
+    display: block;
+  }
 }
 
 @layer ui {
