@@ -1,11 +1,11 @@
 <template>
 <div class="board board-3x3">
-  <div v-for="cell in board"
+  <div v-for="cell of unref(board)"
     role="button" aria-pressed="false"
-    :key="cell.name"
+    :key="cell.name()"
     :class="[
       'cell',
-      cell.name]"
+      cell.name()]"
     :tabindex="cell.index"
     v-text="cell.marker"
     @drop.prevent="mark(cell)"
@@ -17,20 +17,18 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { BLANK } from '~/shared/types/equip'
+import { BLANK, type Marker, type Equipment } from '~/shared/types/equip'
 
-const { board } = defineProps<{
-  board: RectCell[]
+const { /*at,*/ board } = defineProps<{
+  board: Ref<RectCell[]> | RectCell[]
+  // at(row: number, col: number): Equipment
 }>()
-const emit = defineEmits(['mark', 'line', 'filled'])
+const emit = defineEmits(['mark'])
 
 function mark(cell: RectCell) {
   if (cell.marker == BLANK) {
     emit('mark', cell.coord)
   }
-  // TODO check line
-  // TODO check filled
 }
 </script>
 

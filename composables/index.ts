@@ -23,46 +23,5 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-// github:SymbolNotFound/tic-tac-topia/shared/types/equip.d.ts
+// github:SymbolNotFound/tic-tac-topia/composables/index.ts
 
-// Some common types among composables and the components that use them.
-
-// Equipment can also represented its absence.
-export type EMPTY = " "
-const BLANK: EMPTY = " "
-
-// Unifying base type for all equipment, which any board can operate with.
-export type Equipment =
-    Marker |
-    D6x3 |
-    Unit |
-    NumberTile |
-    FrenchCard |
-    SetCard |
-    EMPTY
-
-export type Marker = "X" | "O"
-
-export type D6 = 1 | 2 | 3 | 4 | 5 | 6
-export type D6x3 = [D6, D6, D6]
-
-export type Unit = { color: "RED" | "BLUE" }
-
-export type NumberTile = {
-  front: number
-  back: number
-}
-
-export type FrenchCard = {
-  suit: "HEARTS" | "SPADES" | "DIAMONDS" | "CLUBS" | "JOKER"
-  rank: "ACE" | "2" | "3" | "4" | 
-      "5" | "6" | "7" | "8" | "9" |
-      "10" | "JACK" | "QUEEN" | "KING" |
-      "JOKER" | "JOKER2"
-}
-
-export type SetCard = {
-  count: 1 | 2 | 3
-  color: "RED" | "GREEN" | "PURPLE"
-  shape: "ROUND" | "POINTY" | "WIGGLE"
-}
