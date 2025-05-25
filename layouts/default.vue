@@ -1,6 +1,6 @@
 <template>
   <site-header />
-  <slot />
+  <slot></slot>
   <site-footer />
 </template>
 

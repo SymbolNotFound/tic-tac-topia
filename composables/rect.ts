@@ -59,7 +59,7 @@ export class RectCell {
 
 // Models the state of a classic <M,N,K>-game board.
 // (e.g. Tic-Tac-Toe is a <3,3,3>-game)
-export default function useMNK(m: number, n: number, k: number): MNKBoard {
+export function useMNK(m: number, n: number, k: number): MNKBoard {
   const coord = (index: number) => ([
       Math.floor(index / n) + 1,
       (index % n) + 1]

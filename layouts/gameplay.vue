@@ -1,17 +1,6 @@
 <template>
   <site-header />
-  <game-tic-tac-meta
-    @subgame="onSubgameStart"
-    @payout="onGoalUpdate"
-    @terminal="onTerminal">
-    <!-- are we putting anything in the default slot?
-        personal profile etc. will go in site-header,
-        site licence/policy in site-footer...
-        
-        websockets or auth token or something?
-        there are things that the game component itself needn't care about
-      -->
-  </game-tic-tac-meta>
+  <slot></slot>
   <site-footer />
 </template>
 
