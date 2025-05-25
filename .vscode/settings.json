@@ -1,6 +1,17 @@
 {
   "editor.rulers": [80, 100],
-  "workbench.colorCustomizations": {
-    "editorRuler.foreground": "#2A9D8F"
+  "emmet.includeLanguages": {
+    "plaintext": "pug"
+  },
+  "emmet.syntaxProfiles": {
+    "vue": "html",
+    "vue-html": "html",
+    "html": {
+      "attr_quotes": "double",
+      "tag_case": "asis",
+      "tag_nl": "decide",
+      "inline_break": 6,
+      "self_closing_tag": "xhtml"
+    }
   }
 }
