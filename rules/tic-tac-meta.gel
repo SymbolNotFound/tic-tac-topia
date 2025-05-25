@@ -1,0 +1,61 @@
+^title := "Tic-Tac-Topia"
+^slug := "t3-meta"
+^summary := "A panoply of Tic-Tac-Toe variants within a Tic-Tac-Toe board"
+^author := "Kevin Damm"
+^version := [0,8,0]
+
+consult "tic-tac-cards" as cards 
+consult "tic-tac-rainbow" as rainbow
+consult "tic-tac-roshambo" as roshambo
+consult "tic-tac-shadow" as shadow
+consult "tic-tac-stones" as stones
+consult "tic-tac-tandem" as tandem
+consult "tic-tac-thrice" as thrice
+consult "tic-tac-throw" as throw
+consult "tic-tac-tiles" as tiles
+
+consult "boards/MNK" (
+  include #RectSurface
+)
+consult "control/turns" (
+  include #Alternating
+)
+
+role (
+  playerX
+  playerO
+)
+init control := #Alternating<playerX, playerO>.control
+
+Marker(playerX) = "X"
+Marker(playerO) = "O"
+
+enum Marking :: *BLANK || Marker(playerX) || Marker(playerO)
+init board := #Rect3x3<Marking>
+
+base subgame(board.Index) = rules
+init (
+  subgame(1, 1) := thrice
+  subgame(1, 2) := stones
+  subgame(1, 3) := cards
+
+  subgame(2, 1) := tandem
+  subgame(2, 2) := rainbow
+  subgame(2, 3) := shadow
+  
+  subgame(3, 1) := tiles
+  subgame(3, 2) := roshambo
+  subgame(3, 3) := throw
+)
+
+input Select(Index)
+
+?player -> Select(?row, ?col) :-
+  board(?row, ?col) == BLANK
+  ==> board(?row, ?col) := play subgame(?row, ?col)
+
+terminal :- board.line(_)
+terminal :- not board.exists(BLANK)
+
+?player $+ 100 :- board.line(?player.Marking)
+?player $+ 50 :- ~board.line(_)
