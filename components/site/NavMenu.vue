@@ -3,25 +3,21 @@
     <site-nav-link
       slug="/"
       icon="🏠">
-      Home
-    </site-nav-link>
+      Home</site-nav-link>
     <site-nav-link
       slug="/about/"
       icon="📖">
-      About
-    </site-nav-link>
+      About</site-nav-link>
   <!--
   <site-nav-link
     slug="/support"
     icon="🫶">
-    Support
-  </site-nav-link>
+    Support</site-nav-link>
   -->
     <site-nav-link
       slug="/join"
       icon="🕹️">
-      Play
-    </site-nav-link>
+      Play</site-nav-link>
   </ul></nav>
 </template>
 
