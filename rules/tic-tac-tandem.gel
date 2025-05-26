@@ -52,13 +52,12 @@ enum BoardIndex := left || right
 
 %% Valid markings on the board include each player's mark and two special marks.
 %% The blank marking is the default value, and cells may also be frozen.
-enum Marking := *BLANK || Marker || FROZEN
+enum Marking := *BLANK || Marker || FROZEN(int)
 const BLANK = "_"
-const FROZEN = "~"
 
 
-init boards := {[
-  #RectSurface<Index, Marking> * BoardIndex
+surface boards =:= {[
+  BoardIndex * #RectSurface<Index, Marking>
 ]}
 
 
@@ -70,35 +69,43 @@ input Mark(
 
 %% Players can mark any open cell (if it is BLANK)
 ?player -> Mark(?bi, ?row, ?col) :-
-  boards[?bi][?row, ?col] == BLANK
-    ==> boards[?bi][?row, ?col] := ?player.Marker
+  boards[?bi].cell(?row, ?col) == BLANK
+    ==> boards[?bi].cell(?row, ?col) := ?player.Marker
 
     %% because play is simultaneous, there is a conflict resolution step.
     \=> playerX.Mark(?bi, ?row, ?col) and playerO.Mark(?bi, ?row, ?col)
       %% When players choose the same position (on either board),
       %% that cell is frozen out for a couple of turns.
-      ==> boards[?bi][?row, ?col] := (FROZEN, 2)
+      ==> boards[?bi].cell(?row, ?col) := FROZEN(2)
 
 %% After two turns of being frozen, the cell reverts to being available.
-when boards[?bi][?r, ?c] == (FROZEN, 1)
-  ==> boards[?bi][?r, ?c] := BLANK
-when boards[?bi][?r, ?c] == (FROZEN, 2)
-  ==> boards[?bi][?r, ?c] := (FROZEN, 1)
+when boards[?bi].cell(?r, ?c) == FROZEN(1)
+  ==> boards[?bi].cell(?r, ?c) := BLANK
+when boards[?bi].cell(?r, ?c) == FROZEN(2)
+  ==> boards[?bi].cell(?r, ?c) := FROZEN(1)
 
 
 line(?player) :-
   role(?player) and
-  let ?mark := ?player.Marker and
-  boards[?i].line(?mark)
+  boards[?i].line(?player.Marker)
 
-open :- boards[any BoardIndex].exists(BLANK)
+open :- boards[_].exists(BLANK)
 
 terminal :- line(_)
 terminal :- ~open
 
 
-playerX $+ 100 :- line(playerX) and ~line(playerO)
-playerO $+ 100 :- ~line(playerX) and line(playerO)
+goal :- line(playerX) and ~line(playerO)
+    ==> {(
+      playerX $+ 100
+      ^winner := playerX
+    )}
+
+goal :- ~line(playerX) and line(playerO)
+    ==> {(
+      playerO $+ 100
+      ^winner := playerO
+    )}
 
 playerX $+ 50 and playerO $+ 50 :-
   ~line(playerX) and ~line(playerO)
