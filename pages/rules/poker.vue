@@ -31,19 +31,34 @@ cards that have been placed on the 3x3 board.
 The deck is the only equipment, each card is a possible marker on the board.
 </p>
 
-<h2>Making Lines</h2>
+<h2>Scoring Lines</h2>
 <p>
-  ...
+The player selects which row, column or diagonal and wagers based on the five
+card hand that results.  The player with the best (poker-scored) hand wins the
+entire pot.
 </p>
 
 <h2>Eventual winning condition</h2>
+
 <p>
-  ...
+There may be a draw if both hands are the same value (possible because two
+players may have the same pair and be matched against the same line).  This
+could be avoided if players continue wagering for initiative, or wagering for
+selection of (exclusive) lines.
+
+Or, suits could be given an arbitrary ranking.  Players may agree to split the
+pot if there is a tie.  To avoid draws, and assuming only two players, the game
+included here has the player who chose this game (i.e., the player dealt first)
+chooses a line and the other player must choose any other line.  There is a
+vanishingly small chance of still getting a tie, then (but it is possible).
+
+In games with wagering, the last person to raise gets to choose the line first.
+This version of the game will probably be included in dealme.cards
 </p>
 
 <h2>Terminal and Goal</h2>
 <p>
-  ...
+Game ends when the final round is played (called or folded).
 </p>
 
 </template>
