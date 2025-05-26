@@ -28,7 +28,7 @@
 import { BLANK, type  Equipment, type Marker } from '~/shared/types/equip'
 
 export interface MNKBoard {
-  cells: RectCell[]
+  cells: MNKCell[]
   
   at(i: number, j: number): Equipment | undefined
   update(i: number, j: number, mark: Equipment): void
@@ -37,17 +37,14 @@ export interface MNKBoard {
   filled(): boolean
 }
 
-// {[ 1..3 ]} & {[ 1..3 ]}
-export type RectCoord = [number, number]
-
-export class RectCell {
+export class MNKCell {
   constructor(
     readonly index: number,
     readonly coord: RectCoord,
     public marker: Equipment) {}
   
   get name(): string {
-    const [ row, col ] = this.coord
+    const { row, col } = this.coord
     return `cell_${row}_${col}`
   }
 
@@ -60,17 +57,17 @@ export class RectCell {
 // Models the state of a classic <M,N,K>-game board.
 // (e.g. Tic-Tac-Toe is a <3,3,3>-game)
 export function useMNK(m: number, n: number, k: number): MNKBoard {
-  const coord = (index: number) => ([
-      Math.floor(index / n) + 1,
-      (index % n) + 1]
-  ) as [number, number]
+  const coord = (index: number) => ({
+      row: Math.floor(index / n) + 1,
+      col: (index % n) + 1,
+  }) as RectCoord
 
   const index = (row: number, col: number) => (
     (row - 1) * n + col - 1
   ) as number
 
   const cells = new Array(m*n).map((i) => (
-      {marker: BLANK, index: i, coord: coord(i)} as RectCell
+      {marker: BLANK, index: i, coord: coord(i)} as MNKCell
   ))
 
   const at = (row: number, col: number) => cells[index(row, col)]?.marker

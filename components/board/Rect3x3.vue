@@ -7,23 +7,27 @@
       'cell',
       cell.name]"
     :tabindex="cell.index"
-    v-text="cell.marker"
     @drop.prevent="mark(cell)"
     @dragenter.prevent @dragover.prevent
     @click="mark(cell)"
     @keydown.space="mark(cell)"
-  ></div>
+  >
+    <slot :name="cell.name">{{ cell.marker }}</slot>
+  </div>
 </div>
 </template>
 
 <script lang="ts" setup>
 import { BLANK, type Marker, type Equipment } from '~/shared/types/equip'
 
-const { /*at,*/ cells } = defineProps<{
+var { cells } = defineProps<{
   cells: Ref<RectCell[]> | RectCell[]
-  // at(row: number, col: number): Equipment
 }>()
 const emit = defineEmits(['mark'])
+
+if (cells === undefined) {
+  // cells = 
+}
 
 function mark(cell: RectCell) {
   if (cell.marker == BLANK) {
