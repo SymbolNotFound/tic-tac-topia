@@ -23,40 +23,13 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-// github:SymbolNotFound/tic-tac-topia/shared/types/game.d.ts
+// github:SymbolNotFound/tic-tac-topia/shared/types/role.d.ts
 
-export interface PlayerMove {
-  role: string
-  coord: Coordinate
-  action: string
+export type PlayerRole = undefined | "X" | "O"
+
+export interface PlayerInfo {
+  userid: string
+  name?: string
+  role: PlayerRole
 }
 
-export interface GameInfo {
-  name: string
-  summary: string
-  component: string
-}
-
-export interface MetaGame {
-  playerX: PlayerInfo
-  playerO: PlayerInfo
-  state: MetaGameState
-}
-
-export interface MetaGameState {
-  history: PlayerMove[]
-  subgames: SubGameState[]
-
-  winner?: {
-    role: string
-  }
-}
-
-export interface SubGameState {
-  info: GameInfo
-  history: PlayerMove[]
-
-  winner?: {
-    role: string
-  }
-}
