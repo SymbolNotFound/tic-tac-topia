@@ -23,28 +23,6 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-// github:SymbolNotFound/tic-tac-topia/composables/auth.ts
+// github:SymbolNotFound/tic-tac-topia/stores/config.ts
 
-// Obtains auth-session details, possibly refreshing an expired session.
-export const useAuth = () => {
-  // stub
-  // TODO use auth via Kinde lib
-  return useState('auth', () => { alert('TODO') })
-}
 
-// Obtains the users's locally-cached authentication and authorization status.
-//
-// This is useful for doing soft-checks on showing certain buttons.  Any actions
-// which require actual authority will go through servers, with bearer tokens,
-// Any actions requiring that level of authority do so through useAuth() instad.
-export const useAuthStatus = () => {
-  // stub
-  // TODO pull latest values from localStorage
-
-  return {
-    hasRole: (role: string) => {
-      // DEBUG not authenticating yet
-      return role == "player" || role == "creator"
-    }
-  }
-}

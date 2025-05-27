@@ -21,15 +21,17 @@
 import { BLANK, type Marker, type Equipment } from '~/shared/types/equip'
 
 var { cells } = defineProps<{
-  cells: Ref<RectCell[]> | RectCell[]
+  cells: Ref<MNKCell[]> | MNKCell[]
 }>()
 const emit = defineEmits(['mark'])
 
 if (cells === undefined) {
-  // cells = 
+  cells = useMNK(3, 3, 3).cells
+} else {
+  // TODO verify *cells contents
 }
 
-function mark(cell: RectCell) {
+function mark(cell: MNKCell) {
   if (cell.marker == BLANK) {
     emit('mark', cell.coord)
   }

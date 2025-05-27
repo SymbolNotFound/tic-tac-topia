@@ -18,6 +18,13 @@
       slug="/join"
       icon="🕹️">
       Play</site-nav-link>
+
+    <label>Theme:
+  <select data-theme-picker name="themepicker" id="theme">
+    <option value="💻">System</option>
+    <option value="☀️">Light</option>
+    <option value="🌑">Dark</option>
+    </select></label>
   </ul></nav>
 </template>
 

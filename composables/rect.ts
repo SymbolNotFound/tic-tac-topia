@@ -25,8 +25,9 @@
 //
 // github:SymbolNotFound/tic-tac-topia/composables/rect.ts
 
-import { BLANK, type  Equipment, type Marker } from '~/shared/types/equip'
+const BLANK = " " as Equipment
 
+// The structure of the `useMNK(m, n, k)` composable.
 export interface MNKBoard {
   cells: MNKCell[]
   

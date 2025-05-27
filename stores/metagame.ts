@@ -23,28 +23,32 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-// github:SymbolNotFound/tic-tac-topia/composables/auth.ts
+// github:SymbolNotFound/tic-tac-topia/stores/metagame.ts
 
-// Obtains auth-session details, possibly refreshing an expired session.
-export const useAuth = () => {
-  // stub
-  // TODO use auth via Kinde lib
-  return useState('auth', () => { alert('TODO') })
-}
+// Shared pinia store for the top-level game state (the MetaGame).
+// This retains all
+export const useMetagameStore = defineStore('metagameStore', {
+  state: () => ({
+    cells: useMNK(3, 3, 3),
+    history: [] as PlayerMove[],
+    players: [] as PlayerInfo[],
+  }),
+  actions: {
+    async playSubgame(coord: RectCoord, initiative: PlayerRole) {
 
-// Obtains the users's locally-cached authentication and authorization status.
-//
-// This is useful for doing soft-checks on showing certain buttons.  Any actions
-// which require actual authority will go through servers, with bearer tokens,
-// Any actions requiring that level of authority do so through useAuth() instad.
-export const useAuthStatus = () => {
-  // stub
-  // TODO pull latest values from localStorage
+      // TODO...
+    },
+    async playCombinedSubgame(from: RectCoord, onto: RectCoord) {
 
-  return {
-    hasRole: (role: string) => {
-      // DEBUG not authenticating yet
-      return role == "player" || role == "creator"
-    }
+      // TODO this part will be a fun demonstration of GEL
+    },
+    async subgameWin(coord: RectCoord, marker: Marker) {
+
+      // TODO...
+    },
+    async subgameDraw(coord: RectCoord) {
+
+      // TODO...
+    },
   }
-}
+})

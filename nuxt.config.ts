@@ -15,5 +15,9 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@nuxt/test-utils',
     '@pinia/nuxt'
-  ]
+  ],
+
+  imports: {
+    dirs: ['stores']
+  }
 })
