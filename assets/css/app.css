@@ -20,19 +20,45 @@
 }
 
 html {
-  color-scheme: light dark;
+  color-scheme: dark light;
+}
+
+:root {
+  --base: #212121;
+  --text: #cfcfcf;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --base: #cfcfcf;
+    --text: #212121;
+  }
 }
 
 @layer layout {
+  :root:has(#theme [value="☀️"]:checked) {
+    color-scheme: light;
+    --base: #cfcfcf;
+    --text: #212121;
+  }
+
+  :root:has(#theme [value="🌑"]:checked) {
+    color-scheme: dark;
+    --base: #212121;
+    --text: #cfcfcf;
+  }
+
   main {
     width: min(65ch, 100% - 4rem);
     margin-inline: auto;
   }
 
   body {
-    font-family: system-ui;
+    font-family: system-ui, sans-serif;
     font-size: 1.125rem;
     line-height: 1.6;
+    color: var(--text);
+    background-color: var(--base);
   }
 
   img,
