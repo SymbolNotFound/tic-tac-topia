@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/icon',
     '@nuxt/test-utils',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
   ],
 
   imports: {
