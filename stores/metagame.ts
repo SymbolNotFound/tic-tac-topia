@@ -25,20 +25,30 @@
 //
 // github:SymbolNotFound/tic-tac-topia/stores/metagame.ts
 
+export type MetagameEvent =
+    | MetagameStart
+    | MetaSelectGame
+    | MetaEvolveGame
+    | MetaSubgameTerminal
+    | MetagameTerminal
+    | MetagameReopen
+    | MetaSubgameResign
+    | MetagameResign
+
 // Shared pinia store for the top-level game state (the MetaGame).
-// This retains all
+// This retains all subgame history within its history
 export const useMetagameStore = defineStore('metagameStore', {
   state: () => ({
-    cells: useMNK(3, 3, 3),
-    history: [] as PlayerMove[],
+    board: useMNK(3, 3, 3),
+    history: [] as MetagameEvent[],
     players: [] as PlayerInfo[],
   }),
   actions: {
-    async playSubgame(coord: RectCoord, initiative: PlayerRole) {
+    async playSubgame(name: string, initiative: PlayerRole) {
 
       // TODO...
     },
-    async playCombinedSubgame(from: RectCoord, onto: RectCoord) {
+    async evolveSubgame(from: RectCoord, onto: RectCoord) {
 
       // TODO this part will be a fun demonstration of GEL
     },
@@ -50,5 +60,55 @@ export const useMetagameStore = defineStore('metagameStore', {
 
       // TODO...
     },
+    // TODO more actions for other metagame state transitions
   }
 })
+
+type MetagameStart = {
+  me: "start-metagame"
+  roles: PlayerRole[]
+}
+
+type MetaSelectGame = {
+  me: "select-game"
+  subgame: string
+  roles: { [key:string]: string }
+}
+
+type MetaEvolveGame = {
+  me: "evolve-game"
+  name: string
+  subgames: string[]
+  rules: string[]
+}
+
+type MetaSubgameTerminal = {
+  me: "end-subgame"
+  subgame: string
+  payouts: {
+    [key:string]: number
+  }
+}
+
+type MetagameTerminal = {
+  me: "end-metagame"
+  payouts: {
+    [key:string]: number
+  }
+}
+
+type MetagameReopen = {
+  me: "reopen-metagame"
+  remain: PlayerRole[]
+}
+
+type MetaSubgameResign = {
+  me: "resign-subgame"
+  subgame: string
+  quitter: string
+}
+
+type MetagameResign = {
+  me: "resign-metagame"
+  quitter: string
+}
