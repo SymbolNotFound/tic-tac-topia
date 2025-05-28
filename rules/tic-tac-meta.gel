@@ -1,18 +1,20 @@
-^title := "Tic-Tac-Topia"
-^slug := "t3-meta"
-^summary := "A panoply of Tic-Tac-Toe variants within a Tic-Tac-Toe board"
-^author := "Kevin Damm"
-^version := [0,8,0]
+output {(
+  ^title := "Tic-Tac-Topia"
+  ^slug := "t3-meta"
+  ^summary := "A panoply of Tic-Tac-Toe variants within a Tic-Tac-Toe board"
+  ^author := "Kevin Damm"
+  ^version := [0,8,0]
+)}
 
-consult "tic-tac-cards" as cards 
-consult "tic-tac-rainbow" as rainbow
-consult "tic-tac-roshambo" as roshambo
-consult "tic-tac-shadow" as shadow
-consult "tic-tac-stones" as stones
-consult "tic-tac-tandem" as tandem
-consult "tic-tac-thrice" as thrice
-consult "tic-tac-throw" as throw
-consult "tic-tac-tiles" as tiles
+consult "tic-tac-cards" ( include * as cards  )
+consult "tic-tac-rainbow" ( include * as rainbow )
+consult "tic-tac-roshambo" ( include * as roshambo )
+consult "tic-tac-shadow" ( include * as shadow )
+consult "tic-tac-stones" ( include * as stones )
+consult "tic-tac-tandem" ( include * as tandem )
+consult "tic-tac-thrice" ( include * as thrice )
+consult "tic-tac-throw" ( include * as throw )
+consult "tic-tac-tiles" ( include * as tiles )
 
 consult "boards/MNK" (
   include #RectSurface
@@ -22,13 +24,19 @@ consult "control/turns" (
 )
 
 role (
-  playerX {( Marker = "X" )}
-  playerO {( Marker = "O" )}
+  playerX {( ^Marker = "X" )}
+  playerO {( ^Marker = "O" )}
 )
-init control := #Alternating<playerX, playerO>.control
 
-enum Marking :: *BLANK || playerX.Marker || playerO.Marker
-init board := #Rect3x3<Marking>
+init control := #Alternating.control {(
+  initiative := playerX
+  reactive := playerO
+)}
+
+enum Marking :: BLANK + playerX.Marker + playerO.Marker + FROZEN
+init board := #Rect3x3<Marking> {(
+  init _ := BLANK
+)}
 
 base subgame(board.Index) = (?history, rules)
 init (
@@ -45,16 +53,19 @@ init (
   subgame(3, 3) := (new, throw)
 )
 
-input Select(Index) :=> board(Index)
+input role -> Select(Index) :=> board(Index)
 
 ?player -> Select(?row, ?col) :-
   board(?row, ?col) == BLANK
   ==> {(
     let ?history, ?game := subgame(?row, ?col)
     let ?result := play ?game
-    board(?row, ?col) := ?result.winner.Marker
+    board(?row, ?col) := ?result.winner.Marker else FROZEN
     subgame(?row, ?col) := ([?result.history, ?history], ?game)
   )}
+
+when board(?row, ?col) == FROZEN
+  ==> board(?row, ?col) := BLANK
 
 terminal :- board.line(_)
 terminal :- not board.exists(BLANK)
