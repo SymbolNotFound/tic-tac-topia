@@ -23,13 +23,12 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-// github:SymbolNotFound/tic-tac-topia/shared/types/role.d.ts
+// github:SymbolNotFound/tic-tac-topia/shared/utils/role.ts
 
-export type PlayerRole = "X" | "O"
-export type MaybePlayer = PlayerRole | undefined
-
-export interface PlayerInfo {
-  userid: string
-  name?: string
-  role: PlayerRole
+export const opponent = (player: MaybePlayer): PlayerRole => {
+  if (!player) {
+    return "X"
+  }
+  return (player == "X") ? "O" : "X"
 }
+
