@@ -1,46 +1,78 @@
----
-slug: t3-stones
-title: Tic-Tac-Stones
-summary: |
-  A reproduction of one of the oldest known games, variants are known as Morris,
-  Achi, Shisima, Dara, and others.  Play consists of two stages: place and move.
-  Winner is the first player to make a line of three in a row with their pieces.
-author: Kevin Damm
-version: 0.3.0
----
+meta {(
+  ^title := "Tic-Tac-Stones"
+  ^slug := "t3-stones"
+  ^alias := "Tic-Tac-Morris"
+  summary := ```\
+A reproduction of one of the oldest known games, variants are known as Morris,
+Achi, Shisima, Dara, and others.  Play consists of two stages: place and move.
+Winner is the first player to make a line of three in a row with their pieces.
+```
+  author: "Kevin Damm"
+  version: [0,4,0]
+)}
 
-consult { #SquareSurface } from "boards/MNK"
+consult "boards/MNK" (
+  include #RectSurface
+)
+consult "control/turns" (
+  include #Alternating
+)
 
-role _ :: {
-  Marker: Marking
-}
+role left, right
+role _ {(
+  ^Color := Color
+)}
 
-data BLANK := "_"
-enum Marking := *EMPTY | "red" | "black"
-enum Index := {{ 1..3 }}
+init control := #Alternating<left, right>.control
 
-role left { Marker: "red" }
-role right { Marker: "black" }
+enum Color := RED + BLACK
 
-init control := AlternatingTurns<{{left, right}}>.control
+init (
+  left.Color := RED
+  right.Color := BLACK
+)
 
-init board := #SquareSurface<Index, Marking>
+
+init EMPTY := "_"
+enum State := EMPTY | Color
+enum Index := {[ 1..3 ]} * {[ 1..3 ]}
+
+init board := #RectSurface<Index, State> {(
+  init _ := EMPTY
+)}
+
+%% When not in control, the only move available is to wait.
+input Wait
+?player -> Wait () :- ~control(?player)
 
 
 phase placement (
-  input Place(Index, Index)
+  input Place(Index)
 
-  ?player -> Place(?row, ?col) :-
-    board[?row, ?col] == BLANK
-      ==> board[?row, ?col] = ?player.Marker
+  ?player -> Place (?row, ?col)
+      :- control(?player) and board[?row, ?col] == EMPTY
+      ==> board[?row, ?col] = ?player.State
 )
+
 
 phase movement (
-  input Move (Index, Index) (Index, Index)
+  %% During the movement phase, the only action is to move a piece on the board.
+  input Move(Index, Index)
 
-  ?player -> Move (?row, ?col) (?toRow, ?toCol) :-
-    board[?row, ?col] == ?player.Marker and
-    board[?toRow, ?toCol] == BLANK
-      ==> board[?row, ?col] := BLANK and
+  %% The player may move to any available coord, not only adjacent.
+  ?player -> Move ((?frRow, ?frCol), (?toRow, ?toCol)) :-
+      control(?player) and
+      board[?frRow, ?frCol] == ?player.Marker and
+      board[?toRow, ?toCol] == BLANK
+      ==> board[?frRow, ?frCol] := BLANK and
           board[?toRow, ?toCol] := ?player.Marker
 )
+
+
+terminal :- board.line(_)
+
+
+left $+ 100 :- board.line(left.Color)
+right $+ 100 :- board.line(right.Color)
+
+role $+ 50 :- ~board.line(any #Role)

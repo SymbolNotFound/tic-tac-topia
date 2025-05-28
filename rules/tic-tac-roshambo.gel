@@ -1,0 +1,52 @@
+output {(
+  ^title := "Tic-Tac-RoShamBo"
+  ^slug := "t3-roshambo"
+  ^alias := "Tic-Tac-Janken"
+  ^summary := "A combination of Tic-Tac-Toe and Rock-Paper-Scissors."
+  ^author := "Kevin Damm"
+  ^version := [0,3,0]
+)}
+
+role X, O
+
+consult "janken" (
+  include Hand
+  include janken {(
+    left := X
+    right := O
+  )}
+)
+
+enum Index :: {[ 1..3 ]} * {[ 1..3 ]}
+enum CellValue :: BLANK + {( role, Hand )}
+
+init board := #RectSurface<Index, CellValue> {(
+  init _ := BLANK
+)}
+
+input role -> Place(Hand, Index)
+
+?player -> Place(?hand, (?row, ?col)) :-
+  board(?row, ?col) == BLANK
+    ==> board(?row, ?col) = (?player, ?hand)
+    \=> conflict(?row, ?col)
+
+conflict(?row, ?col)
+  <== left -> Place(_, ?row, ?col) and
+      right -> Place(_, ?row, ?col)
+  ==> {(
+    let ?outcome := play janken {( terminal )}
+    board(?row, ?col) := (?outcome.winner, ?outcome.shown)
+  )} 
+
+
+line(?player) :-
+  ?player in role and
+  let ?mark := ?player.Marker
+  board.line((?player, ?mark))
+
+terminal :- line(_)
+terminal :- board.exists(BLANK)
+
+left  $+ 100 :- line(left) and ~line(right)
+right $+ 100 :- ~line(left) and line(right)

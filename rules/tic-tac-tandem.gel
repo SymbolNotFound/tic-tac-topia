@@ -25,21 +25,24 @@
 %%
 %% github:SymbolNotFound/tic-tac-topia/rules/tic-tac-tandem.gel
 
-^title := "Tic-Tac-Tandem"
-^slug := "t3-tandem"
-^author := "Kevin Damm"
-^version := [0,7,9]
+output {(
+  ^title := "Tic-Tac-Tandem"
+  ^slug := "t3-tandem"
+  ^author := "Kevin Damm"
+  ^version := [0,7,9]
+)}
 
 consult "boards/MNK" (
   include #RectSurface
 )
 
 
-role playerX, playerO {(
-  Marker
-)}
-
 enum Marker := "X" || "O"
+
+role playerX, playerO
+role _ {(
+  base ^Marker :: Marker
+)}
 
 init (
   playerX.Marker := "X"
@@ -47,17 +50,17 @@ init (
 )
 
 
+base BLANK := "_"
 enum Index := {[ 1..3 ]} * {[ 1..3 ]}
 enum BoardIndex := left || right
 
 %% Valid markings on the board include each player's mark and two special marks.
 %% The blank marking is the default value, and cells may also be frozen.
-enum Marking := *BLANK || Marker || FROZEN(int)
-const BLANK = "_"
+enum Marking :: BLANK + Marker + FROZEN(int)
 
 
 surface boards =:= {[
-  BoardIndex * #RectSurface<Index, Marking>
+  BoardIndex * #RectSurface<Index, Marking> {( init _ := BLANK )}
 ]}
 
 

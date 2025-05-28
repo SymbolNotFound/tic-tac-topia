@@ -1,0 +1,24 @@
+%% Rock/Paper/Scissors a.k.a. Janken a.k.a. Roshambo
+
+role left, right
+
+output {(
+  ^winner :: role
+  ^shown :: Hand
+)}
+
+enum Hand :: ROCK << PAPER << SCISSORS << ROCK
+base showing(role) = Hand
+
+input role -> Show(Hand)
+
+?player -> Show(?hand)
+  ==> showing(?player) := ?hand
+
+terminal :- role(^winner) # role(?other) and
+    showing(^winner) >> showing(?other)
+  ==> {(
+    ^shown := showing(?player)
+    ^winner $= 100
+    ^other $= 0
+  )}
