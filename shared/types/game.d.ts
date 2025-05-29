@@ -25,10 +25,11 @@
 //
 // github:SymbolNotFound/tic-tac-topia/shared/types/game.d.ts
 
-export interface PlayerMove {
-  role: string
-  coord: Coordinate
-  action: string
+export interface PlayerAction {
+  role: string;
+  action: string;
+  coord: Coordinate;
+  equip: Equipment[];
 }
 
 export interface GameInfo {

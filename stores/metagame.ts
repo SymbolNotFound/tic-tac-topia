@@ -25,24 +25,53 @@
 //
 // github:SymbolNotFound/tic-tac-topia/stores/metagame.ts
 
+import { BLANK } from "~/shared/types/equip"
+import type { PlayerRole } from "~/shared/types/role"
+
 export type MetagameEvent =
-    | MetagameStart
-    | MetaSelectGame
-    | MetaEvolveGame
-    | MetaSubgameTerminal
-    | MetagameTerminal
-    | MetagameReopen
-    | MetaSubgameResign
-    | MetagameResign
+    | MetaplayDefineGame
+    | MetaplayStart
+    | MetaplaySubgameStart
+    | MetaplayEvolveGame
+    | MetaplayReopen
+    | MetaplaySubgameTerminal
+    | MetaplayTerminal
+    | MetaplaySubgameResign
+    | MetaplayResign
 
 // Shared pinia store for the top-level game state (the MetaGame).
 // This retains all subgame history within its history
 export const useMetagameStore = defineStore('metagameStore', {
-  state: () => ({
-    board: useMNK(3, 3, 3),
-    history: [] as MetagameEvent[],
-    players: [] as PlayerInfo[],
-  }),
+  state: () => {
+    const board = useMNK(3, 3, 3)
+    const history = [] as MetagameEvent[]
+    const players = [] as PlayerInfo[]
+
+    function boardMarkings(): PlayerAction[] {
+      const actions = [] as PlayerAction[]
+      for (var e of history) {
+        if (e.me != "end-subgame") { continue }
+        let winner: MaybePlayer = undefined
+        for (var role in e.payouts) {
+          if (e.payouts[role] == 100) {
+            winner = role as PlayerRole
+            break
+          }
+        }
+        if (!winner) { continue }
+
+        actions.unshift({
+          role: winner,
+          action: "mark",
+          coord: e.coord,
+          equip: [winner as Marker],
+        })
+      }
+      return actions 
+    }
+
+    return { board, history, players }
+  },
   actions: {
     async playSubgame(name: string, initiative: PlayerRole) {
 
@@ -64,51 +93,63 @@ export const useMetagameStore = defineStore('metagameStore', {
   }
 })
 
-type MetagameStart = {
-  me: "start-metagame"
-  roles: PlayerRole[]
+type MetaplayDefineGame = {
+  me: "define-subgame"
+  name: string
+  coord: RectCoord,
+  rules: string[]
 }
 
-type MetaSelectGame = {
-  me: "select-game"
-  subgame: string
+type MetaplayStart = {
+  me: "start-metagame"
   roles: { [key:string]: string }
 }
 
-type MetaEvolveGame = {
+type MetaplaySubgameStart = {
+  me: "start-subgame"
+  coord: RectCoord,
+  subgame: string
+  roles: { [key:string]: string }
+  history: PlayerAction[]
+}
+
+type MetaplayEvolveGame = {
   me: "evolve-game"
+  coord: RectCoord,
   name: string
   subgames: string[]
   rules: string[]
 }
 
-type MetaSubgameTerminal = {
+type MetaplayReopen = {
+  me: "reopen-metagame"
+  remain: PlayerRole[]
+}
+
+type MetaplaySubgameTerminal = {
   me: "end-subgame"
+  coord: RectCoord,
   subgame: string
   payouts: {
     [key:string]: number
   }
 }
 
-type MetagameTerminal = {
+type MetaplayTerminal = {
   me: "end-metagame"
   payouts: {
     [key:string]: number
   }
 }
 
-type MetagameReopen = {
-  me: "reopen-metagame"
-  remain: PlayerRole[]
-}
 
-type MetaSubgameResign = {
+type MetaplaySubgameResign = {
   me: "resign-subgame"
   subgame: string
   quitter: string
 }
 
-type MetagameResign = {
+type MetaplayResign = {
   me: "resign-metagame"
   quitter: string
 }
